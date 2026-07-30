@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from typing import Optional, List
@@ -28,6 +29,11 @@ app.add_middleware(
 async def validation_exception_handler(request, exc):
     print(f"Validation Error: {exc}")
     return JSONResponse(status_code=422, content={"detail": exc.errors()})
+
+import os
+if not os.path.exists("static"):
+    os.makedirs("static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Pydantic schemas for requests
 class IngestRequest(BaseModel):
@@ -150,18 +156,28 @@ def add_blocklist(req: BlocklistAdd, db: Session = Depends(get_db)):
 
 @app.get("/api/users/{user_id}/activity")
 def get_activity(user_id: str, db: Session = Depends(get_db)):
-    events = db.query(models.ActivityEvent).filter(models.ActivityEvent.user_id == user_id).order_by(models.ActivityEvent.captured_at.desc()).limit(100).all()
+    events = db.query(models.ActivityEvent).filter(models.ActivityEvent.user_id == user_id).order_by(models.ActivityEvent.captured_at.desc()).limit(500).all()
     results = []
     for evt in events:
         analysis = db.query(models.AiAnalysis).filter(models.AiAnalysis.event_id == evt.id).first()
+        # Ensure the datetime has a timezone when serializing so JS parses it correctly
+        dt_str = evt.captured_at.isoformat()
+        if not dt_str.endswith('Z') and '+' not in dt_str[-6:]:
+            dt_str += 'Z'
+            
         results.append({
             "id": evt.id,
-            "captured_at": evt.captured_at,
+            "captured_at": dt_str,
             "domain": evt.domain,
             "title": evt.tab_title,
+            "trigger": evt.capture_trigger,
             "analysis": {
                 "category": analysis.category if analysis else None,
                 "summary": analysis.task_summary if analysis else None,
+                "app_or_site": analysis.application_or_site if analysis else None,
+                "sensitive": analysis.contains_sensitive_content if analysis else False,
+                "confidence": analysis.confidence if analysis else None,
+                "latency_ms": analysis.latency_ms if analysis else None,
             } if analysis else None
         })
     return results

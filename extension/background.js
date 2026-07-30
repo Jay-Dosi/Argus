@@ -1,12 +1,15 @@
 const API_BASE = 'http://localhost:8000/api';
 let captureIntervalId = null;
 
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.local.set({ 
-    monitoringActive: false,
-    userId: crypto.randomUUID(), // Mock user ID for this prototype
-    blocklist: ['*://*.bank.com/*', '*://*.health.com/*']
-  });
+chrome.runtime.onInstalled.addListener(async () => {
+  const current = await chrome.storage.local.get(['userId', 'monitoringActive']);
+  if (!current.userId) {
+    chrome.storage.local.set({ 
+      monitoringActive: false,
+      userId: crypto.randomUUID(),
+      blocklist: ['*://*.bank.com/*', '*://*.health.com/*']
+    });
+  }
   
   // Set up default alarm for coarse interval (e.g., 2 minutes)
   chrome.alarms.create('capture_interval', { periodInMinutes: 2 });

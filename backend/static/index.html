@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Argus Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="brand">
+      <h2>👁️ Argus</h2>
+      <p>Activity Intelligence</p>
+    </div>
+    <ul class="nav">
+      <li class="active">Overview</li>
+      <li>Timeline</li>
+      <li>Categories</li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <header>
+      <h1>Dashboard Overview</h1>
+      <div class="user-id-container">
+        <span class="user-label">User ID:</span>
+        <span id="userIdDisplay">Loading...</span>
+      </div>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Captures</h3>
+        <p id="totalCaptures">--</p>
+      </div>
+      <div class="stat-card">
+        <h3>Top Category</h3>
+        <p id="topCategory">--</p>
+      </div>
+      <div class="stat-card">
+        <h3>Avg AI Latency</h3>
+        <p id="avgLatency">-- ms</p>
+      </div>
+    </div>
+
+    <div class="activity-section">
+      <h2>Detailed Activity Timeline</h2>
+      <div class="table-container">
+        <table id="activityTable">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Category</th>
+              <th>Domain / App</th>
+              <th>Summary</th>
+              <th>Confidence</th>
+              <th>Flags</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr><td colspan="6" class="text-center">Loading activity data...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
