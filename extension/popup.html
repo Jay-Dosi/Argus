@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Argus Popup</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="header">
+    <h1>Argus</h1>
+    <div class="status-indicator" id="statusDot"></div>
+  </div>
+  
+  <div class="content">
+    <p>Status: <strong id="statusText">Inactive</strong></p>
+    <button id="toggleBtn">Start Monitoring</button>
+    <button id="optionsBtn">Settings</button>
+  </div>
+  
+  <div class="recent-activity" id="recentActivity">
+    <h3>Recent Activity</h3>
+    <ul id="activityList">
+      <!-- Activity items injected here -->
+    </ul>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

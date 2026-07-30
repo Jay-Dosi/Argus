@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Argus Options & Consent</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Argus Settings</h1>
+    
+    <div id="consentSection" class="card highlight-card">
+      <h2>Privacy & Consent</h2>
+      <p>Argus captures screenshots of your active tab periodically and sends them to a Google Gemini vision AI model to classify your activity. The raw screenshots are <strong>not stored</strong> by default, only the summary text.</p>
+      
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="consentCheckbox">
+          I consent to having my browser activity monitored and processed by AI.
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="retentionCheckbox">
+          (Optional) Retain raw screenshots for 7 days (requires backend storage setup).
+        </label>
+      </div>
+      <button id="saveConsentBtn">Save Consent</button>
+      <p id="consentStatus" class="status-msg"></p>
+    </div>
+
+    <div class="card">
+      <h2>Sensitive Domains Blocklist</h2>
+      <p>Traffic to these domains will never be captured or analyzed.</p>
+      <ul id="blocklistUI">
+        <!-- populated by js -->
+      </ul>
+      <div class="add-domain-group">
+        <input type="text" id="newDomainInput" placeholder="e.g. *://*.paypal.com/*">
+        <button id="addDomainBtn">Add</button>
+      </div>
+    </div>
+
+    <div class="card danger-zone">
+      <h2>Danger Zone</h2>
+      <p>This will delete all your activity history from the server.</p>
+      <button id="deleteDataBtn" class="btn-danger">Delete All My Data</button>
+      <p id="deleteStatus" class="status-msg"></p>
+    </div>
+
+  </div>
+  <script src="options.js"></script>
+</body>
+</html>
